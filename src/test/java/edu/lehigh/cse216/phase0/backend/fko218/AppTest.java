@@ -35,4 +35,56 @@ public class AppTest
     {
         assertTrue( true );
     }
+
+
+    public void testNullVal1Val2() {
+        // This test ensures that a datum without val1 or val2 fields won't be
+        // inserted
+        App a = new App();
+        String initialData = a.getAllData();
+        Datum d = new Datum();
+        d.val1 = null; 
+        d.val2 = null; 
+        a.insertDatum(d);
+        String finalData = a.getAllData();
+        assertTrue(initialData.equals(finalData));
+    }
+
+    public void testNullVal1() {
+        App a = new App();
+        String initialData = a.getAllData();
+        Datum d = new Datum();
+        d.val1 = null; 
+        d.val2 = "World"; 
+        a.insertDatum(d);
+        String finalData = a.getAllData();
+        assertTrue(initialData.equals(finalData));
+    }
+
+    public void testNullVal2() {
+        App a = new App();
+        String initialData = a.getAllData();
+        Datum d = new Datum();
+        d.val1 = "Hello";
+        d.val2 = null;
+        a.insertDatum(d);
+        String finalData = a.getAllData();
+        assertTrue(initialData.equals(finalData));
+    }
+
+    public void testInitialEmpty() {
+        App a = new App();
+        String initialData = a.getAllData();
+        assertTrue(initialData.equals("[]"));
+    }
+
+    public void testNoNullVals() {
+        App a = new App();
+        Datum d = new Datum();
+        d.val1 = "Hello";
+        d.val2 = "World";
+        a.insertDatum(d);
+        String finalData = a.getAllData();
+        assertTrue(finalData.equals("[{\"index\":0,\"val1\":\"Hello\"," + "\"val2\":\"World\"}]"));
+    }
 }

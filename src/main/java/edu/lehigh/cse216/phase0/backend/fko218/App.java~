@@ -1,0 +1,20 @@
+package edu.lehigh.cse216.phase0.backend.fko218;
+
+import static spark.Spark.*;
+
+/**
+ * App is a simple web application to demonstrate REST APIs
+ */
+public class App 
+{
+	/**
+	* Create a route that returns the text 'hello world' in response to 
+	* GET requests for the /hello resource
+	*/
+    public static void main( String[] args )
+    {
+        get("/hello", (req, res) -> {
+        	return "Hello World";
+        });
+    }
+}

@@ -1,0 +1,77 @@
+    <html>
+    <head>
+        <title>Welcome to a Simple REST Site</title>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    </head>
+    <body>
+        <div>
+            <label for="new_val1">Value #1:</label>
+            <input id="new_val1" type="text" />
+            <label for="new_val2">Value #2:</label>
+            <input id="new_val2" type="text" />
+            <button id="add_row">Add Row</button>
+        </div>
+        <div id="listing"></div>
+    </body>
+
+    <script>
+        $(document).ready(function () {
+            $("#add_row").click(function (event) {
+                var val1 = $("#new_val1").val();
+                val1 = (val1 === "") ? null : val1;
+                var val2 = $("#new_val2").val();
+                val2 = (val2 === "") ? null : val2;
+                $.ajax({
+                    type: "POST",
+                    url: "/data",
+                    data: JSON.stringify({ val1: val1, val2: val2 }),
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.res === "ok") {
+                            $("#new_val1").val("");
+                            $("#new_val2").val("");
+                            getDataFromServer();
+                        }
+                        else {
+                            window.alert("error");
+                        }
+                    }
+            });
+        });
+        getDataFromServer();
+    });
+
+    function getDataFromServer() {
+        $.ajax({
+            type: "GET",
+            url: "/data",
+            dataType: "json",
+            success: function (data) {
+                var res = "<table>"
+                for (var i = 0; i < data.length; ++i){
+                    var d = data[i];
+                    res += "<tr><td>" + d.val1 + "</td><td>" + d.val2 + "</td><td><button onClick='deleteRow(" + d.index + ")'>Delete Row</button></td></tr>"
+                }
+                res += "</table>";
+                $("#listing").html(res);
+            }
+        });
+    };
+
+    function deleteRow(idx) {
+        $.ajax({
+            type: "DELETE",
+            url: "/data/" + idx,
+            dataType: "json",
+            success: function (data) {
+                if (data.res === "ok") {
+                    getDataFromServer();
+                }
+                else {
+                    window.alert("error");
+                }
+            }
+        });
+    }
+</script>
+</html>
